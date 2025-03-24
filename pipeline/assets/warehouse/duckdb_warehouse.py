@@ -20,7 +20,7 @@ from pipeline.utils.duckdb_wrapper import DuckDBWrapper
         "hourly_weather_asset",
     ],
     compute_kind="DuckDB",
-    group_name="Transformation",
+    group_name="Warehouse",
 )
 def duckdb_warehouse(context: AssetExecutionContext):
     """
