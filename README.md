@@ -9,7 +9,7 @@ This repository serves as a local data platform for working with MTA data. It en
 
 This end-to-end workflow enables efficient data processing and insight generation from MTA datasets.
 
-What does this repo use
+The contents of this repo can be easily copied and sent to an LLM with https://github.com/ChristianCasazza/codeprinter
  
 # Project Setup Guide
 
