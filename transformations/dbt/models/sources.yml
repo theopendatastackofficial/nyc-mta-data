@@ -1,0 +1,39 @@
+version: 2
+sources:
+- name: main
+  tables:
+  - name: mta_subway_hourly_ridership
+    meta:
+      dagster:
+        asset_key:
+        - mta_subway_hourly_ridership
+  - name: mta_daily_ridership
+    meta:
+      dagster:
+        asset_key:
+        - mta_daily_ridership
+  - name: mta_operations_statement
+    meta:
+      dagster:
+        asset_key:
+        - mta_operations_statement
+  - name: mta_subway_origin_destination_2023
+    meta:
+      dagster:
+        asset_key:
+        - mta_subway_origin_destination_2023
+  - name: mta_subway_origin_destination_2024
+    meta:
+      dagster:
+        asset_key:
+        - mta_subway_origin_destination_2024
+  - name: daily_weather_asset
+    meta:
+      dagster:
+        asset_key:
+        - daily_weather_asset
+  - name: hourly_weather_asset
+    meta:
+      dagster:
+        asset_key:
+        - hourly_weather_asset
