@@ -66,4 +66,4 @@ def table_metadata(table_name):
     })
 
 if __name__ == '__main__':
-    app.run(debug=False, port=5050)
+    app.run(debug=False)
