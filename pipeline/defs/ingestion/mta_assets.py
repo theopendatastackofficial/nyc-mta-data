@@ -1,5 +1,3 @@
-# pipeline/assets/ingestion/mta_assets.py
-
 import os
 import gc
 import requests
@@ -10,7 +8,8 @@ from datetime import datetime
 from dagster import asset, Output, MetadataValue
 
 from pipeline.resources.socrata_resource import SocrataResource
-from .processing.mta_processing import *
+# Updated import: use full package path instead of "assets"
+from pipeline.assets.ingestion.mta_processing import *
 
 @asset(
     name="mta_daily_ridership",
@@ -139,4 +138,3 @@ def mta_subway_hourly_ridership():
         "end_year": 2024,
         "end_month": 12
     }
-
