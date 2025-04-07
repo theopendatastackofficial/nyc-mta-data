@@ -1,23 +1,20 @@
-
-from flask import Flask, render_template, jsonify, request
-import sqlite3
 import os
 import sys
-import os
+import socket
+import sqlite3
+from flask import Flask, render_template, jsonify, request
+
 # Add the parent directory to the module search path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 from pipeline.constants import SQLITE_PATH
-# Correct path to the 'templates' folder relative to the 'scripts' directory
-app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), 'templates'))
 
-# Path to your SQLite file
+app = Flask(__name__, template_folder=os.path.join(os.path.dirname(__file__), 'templates'))
 sqlite_file_path = SQLITE_PATH
 
-# Function to get column names, data types, and descriptions from a specific table
 def get_table_metadata(table_name):
     conn = sqlite3.connect(sqlite_file_path)
     cursor = conn.cursor()
-    
+
     query = """
     SELECT column_name, data_type, description
     FROM duckdb_schema
@@ -28,7 +25,6 @@ def get_table_metadata(table_name):
     rows = cursor.fetchall()
     conn.close()
     
-    # Structure the result as both human-readable and LLM-optimized
     metadata_human = []
     metadata_llm = f"Table: {table_name}\n"
     
@@ -41,12 +37,11 @@ def get_table_metadata(table_name):
             "description": description or "No description available"
         })
         
-        # LLM-optimized version (minimal whitespace, compact format)
+        # LLM-optimized version
         metadata_llm += f"{column_name}: {data_type}, {description or 'No description'}; "
     
     return metadata_human, metadata_llm
 
-# Main route to show the list of tables
 @app.route('/')
 def index():
     conn = sqlite3.connect(sqlite_file_path)
@@ -56,7 +51,6 @@ def index():
     conn.close()
     return render_template('index.html', tables=tables)
 
-# Route to get metadata for a specific table
 @app.route('/table/<table_name>')
 def table_metadata(table_name):
     metadata_human, metadata_llm = get_table_metadata(table_name)
@@ -65,5 +59,20 @@ def table_metadata(table_name):
         "llm": metadata_llm
     })
 
+def find_open_port(start_port=5000, max_port=65535):
+    """
+    Tries to find an open port, starting at `start_port` up to `max_port`.
+    Returns the first open port found or raises an error if none are available.
+    """
+    for port in range(start_port, max_port):
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            # If connect_ex returns 0, the port is in use; otherwise it's free
+            if sock.connect_ex(('127.0.0.1', port)) != 0:
+                return port
+    raise RuntimeError("No open ports available in range.")
+
 if __name__ == '__main__':
-    app.run(debug=False)
+    # Continuously check for an available port from 5000 upward
+    open_port = find_open_port(5000, 65535)
+    print(f"Launching Flask on port {open_port}")
+    app.run(debug=False, port=open_port)

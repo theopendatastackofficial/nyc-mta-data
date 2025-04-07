@@ -17,7 +17,7 @@ class OpenMateoDailyWeatherConstants:
 
 
 class OpenMateoHourlyWeatherConstants:
-    START_DATE = "2025-02-01"
+    START_DATE = "2021-02-01"
     END_DATE = "2025-03-15"
     LATITUDE = 40.7143
     LONGITUDE = -74.006
@@ -96,7 +96,7 @@ def hourly_weather_asset(context):
         logger=context.log,
     )
 
-    hourly_df = client.fetch_hourly_data(chunked=True)  # Example: chunked fetch for hourly data
+    hourly_df = client.fetch_hourly_data(chunked=False)  # Example: chunked fetch for hourly data
 
     if hourly_df.is_empty():
         context.log.warning("No hourly weather data returned for the specified range.")
